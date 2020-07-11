@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 
-namespace NCLA
+namespace MedERP
 {
     public enum LogLevel
     {

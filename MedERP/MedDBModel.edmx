@@ -7,26 +7,10 @@
     <Schema Namespace="MedDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityContainer Name="MedDBModelStoreContainer">
     <EntitySet Name="UsersSet" EntityType="MedDBModel.Store.UsersSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="UserSessionsSet" EntityType="MedDBModel.Store.UserSessionsSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="RolesSet" EntityType="MedDBModel.Store.RolesSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="ClientsSet" EntityType="MedDBModel.Store.ClientsSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="VisitsSet" EntityType="MedDBModel.Store.VisitsSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="VisitTypeSet" EntityType="MedDBModel.Store.VisitTypeSet" store:Type="Tables" Schema="dbo" />
-    <AssociationSet Name="ClientsVisits" Association="MedDBModel.Store.ClientsVisits">
-      <End Role="Clients" EntitySet="ClientsSet" />
-      <End Role="Visits" EntitySet="VisitsSet" />
-    </AssociationSet>
-    <AssociationSet Name="UserSessionsVisits" Association="MedDBModel.Store.UserSessionsVisits">
-      <End Role="UserSessions" EntitySet="UserSessionsSet" />
-      <End Role="Visits" EntitySet="VisitsSet" />
-    </AssociationSet>
-    <AssociationSet Name="VisitTypeVisits" Association="MedDBModel.Store.VisitTypeVisits">
-      <End Role="VisitType" EntitySet="VisitTypeSet" />
-      <End Role="Visits" EntitySet="VisitsSet" />
-    </AssociationSet>
-    <AssociationSet Name="UsersRoles" Association="MedDBModel.Store.UsersRoles">
+    <EntitySet Name="RoleSet" EntityType="MedDBModel.Store.RoleSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="RoleUsers" Association="MedDBModel.Store.RoleUsers">
+      <End Role="Role" EntitySet="RoleSet" />
       <End Role="Users" EntitySet="UsersSet" />
-      <End Role="Roles" EntitySet="RolesSet" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="UsersSet">
@@ -35,113 +19,32 @@
     </Key>
     <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RoleID" Type="int" Nullable="false" />
-    <Property Name="Firstname" Type="nvarchar" Nullable="true" MaxLength="50" />
-    <Property Name="Lastname" Type="nvarchar" Nullable="false" MaxLength="50" />
-    <Property Name="Middlename" Type="nvarchar" Nullable="true" MaxLength="50" />
-    <Property Name="Phone" Type="nvarchar" Nullable="true" MaxLength="25" />
-    <Property Name="Dismissed" Type="bit" Nullable="false" />
-    <Property Name="Roles_RoleID" Type="int" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="MiddleName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="PhoneNumber" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="IsDismissed" Type="bit" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" Nullable="true" MaxLength="255" />
   </EntityType>
-  <EntityType Name="UserSessionsSet">
+  <EntityType Name="RoleSet">
     <Key>
-      <PropertyRef Name="SessionID" />
+      <PropertyRef Name="RoleId" />
     </Key>
-    <Property Name="SessionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserID" Type="int" Nullable="false" />
-    <Property Name="StartDateTime" Type="datetime" Nullable="false" />
-    <Property Name="EndDateTime" Type="datetime" Nullable="false" />
+    <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleName" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="AllowDeleteClients" Type="bit" Nullable="false" />
+    <Property Name="AllowDeleteVisits" Type="bit" Nullable="false" />
+    <Property Name="AllowAddUsers" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="RolesSet">
-    <Key>
-      <PropertyRef Name="RoleID" />
-    </Key>
-    <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RoleName" Type="nvarchar" Nullable="false" MaxLength="50" />
-    <Property Name="RemoveVisits" Type="bit" Nullable="false" DefaultValue="true" />
-    <Property Name="RemoveClients" Type="bit" Nullable="false" DefaultValue="true" />
-    <Property Name="AddUsers" Type="bit" Nullable="false" DefaultValue="true" />
-  </EntityType>
-  <EntityType Name="ClientsSet">
-    <Key>
-      <PropertyRef Name="ClientID" />
-    </Key>
-    <Property Name="ClientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Firstname" Type="nvarchar" Nullable="true" MaxLength="50" />
-    <Property Name="Lastname" Type="nvarchar" Nullable="true" MaxLength="50" />
-    <Property Name="Middlename" Type="nvarchar" Nullable="true" MaxLength="50" />
-    <Property Name="Photo" Type="varbinary(max)" Nullable="true" />
-    <Property Name="Gender" Type="nvarchar" Nullable="false" MaxLength="15" />
-    <Property Name="BirthDate" Type="datetime" Nullable="true" />
-    <Property Name="Address" Type="nvarchar" Nullable="true" MaxLength="255" />
-    <Property Name="Phone" Type="nvarchar" Nullable="true" MaxLength="25" />
-    <Property Name="AddedByUser" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="VisitsSet">
-    <Key>
-      <PropertyRef Name="VisitID" />
-    </Key>
-    <Property Name="VisitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ClientID" Type="int" Nullable="false" />
-    <Property Name="UserID" Type="int" Nullable="false" />
-    <Property Name="SessionID" Type="int" Nullable="false" />
-    <Property Name="TypeID" Type="int" Nullable="false" />
-    <Property Name="Diagnosis" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="VisitDateTime" Type="datetime" Nullable="false" />
-    <Property Name="Removed" Type="bit" Nullable="false" />
-    <Property Name="RemovedByUser" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="VisitTypeSet">
-    <Key>
-      <PropertyRef Name="TypeID" />
-    </Key>
-    <Property Name="TypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TypeName" Type="nvarchar" Nullable="false" MaxLength="25" />
-  </EntityType>
-  <Association Name="ClientsVisits">
-    <End Role="Clients" Type="MedDBModel.Store.ClientsSet" Multiplicity="1" />
-    <End Role="Visits" Type="MedDBModel.Store.VisitsSet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Clients">
-        <PropertyRef Name="ClientID" />
-      </Principal>
-      <Dependent Role="Visits">
-        <PropertyRef Name="ClientID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="UserSessionsVisits">
-    <End Role="UserSessions" Type="MedDBModel.Store.UserSessionsSet" Multiplicity="1" />
-    <End Role="Visits" Type="MedDBModel.Store.VisitsSet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UserSessions">
-        <PropertyRef Name="SessionID" />
-      </Principal>
-      <Dependent Role="Visits">
-        <PropertyRef Name="SessionID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="VisitTypeVisits">
-    <End Role="VisitType" Type="MedDBModel.Store.VisitTypeSet" Multiplicity="1" />
-    <End Role="Visits" Type="MedDBModel.Store.VisitsSet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="VisitType">
-        <PropertyRef Name="TypeID" />
-      </Principal>
-      <Dependent Role="Visits">
-        <PropertyRef Name="TypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="UsersRoles">
+  <Association Name="RoleUsers">
+    <End Role="Role" Type="MedDBModel.Store.RoleSet" Multiplicity="1" />
     <End Role="Users" Type="MedDBModel.Store.UsersSet" Multiplicity="*" />
-    <End Role="Roles" Type="MedDBModel.Store.RolesSet" Multiplicity="1" />
     <ReferentialConstraint>
-      <Principal Role="Roles">
-        <PropertyRef Name="RoleID" />
+      <Principal Role="Role">
+        <PropertyRef Name="RoleId" />
       </Principal>
       <Dependent Role="Users">
-        <PropertyRef Name="Roles_RoleID" />
+        <PropertyRef Name="RoleID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -151,26 +54,10 @@
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="MedDBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="MedDBModelContainer" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="UsersSet" EntityType="MedDBModel.Users" />
-          <EntitySet Name="UserSessionsSet" EntityType="MedDBModel.UserSessions" />
-          <EntitySet Name="RolesSet" EntityType="MedDBModel.Roles" />
-          <EntitySet Name="ClientsSet" EntityType="MedDBModel.Clients" />
-          <EntitySet Name="VisitsSet" EntityType="MedDBModel.Visits" />
-          <AssociationSet Name="ClientsVisits" Association="MedDBModel.ClientsVisits">
-            <End EntitySet="ClientsSet" Role="Clients" />
-            <End EntitySet="VisitsSet" Role="Visits" />
-          </AssociationSet>
-          <AssociationSet Name="UserSessionsVisits" Association="MedDBModel.UserSessionsVisits">
-            <End EntitySet="UserSessionsSet" Role="UserSessions" />
-            <End EntitySet="VisitsSet" Role="Visits" />
-          </AssociationSet>
-          <EntitySet Name="VisitTypeSet" EntityType="MedDBModel.VisitType" />
-          <AssociationSet Name="VisitTypeVisits" Association="MedDBModel.VisitTypeVisits">
-            <End EntitySet="VisitTypeSet" Role="VisitType" />
-            <End EntitySet="VisitsSet" Role="Visits" />
-          </AssociationSet>
-          <AssociationSet Name="UsersRoles" Association="MedDBModel.UsersRoles">
+          <EntitySet Name="RoleSet" EntityType="MedDBModel.Role" />
+          <AssociationSet Name="RoleUsers" Association="MedDBModel.RoleUsers">
+            <End Role="Role" EntitySet="RoleSet" />
             <End Role="Users" EntitySet="UsersSet" />
-            <End Role="Roles" EntitySet="RolesSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Users">
@@ -179,114 +66,36 @@
           </Key>
           <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoleID" Type="Int32" Nullable="false" />
-          <Property Name="Firstname" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="Lastname" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="Middlename" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="Phone" Type="String" MaxLength="25" Unicode="true" FixedLength="false" />
-          <Property Name="Dismissed" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Roles" Relationship="MedDBModel.UsersRoles" FromRole="Users" ToRole="Roles" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="MiddleName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="15" Unicode="true" FixedLength="false" />
+          <Property Name="IsDismissed" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="MedDBModel.RoleUsers" FromRole="Users" ToRole="Role" />
+          <Property Name="Password" Type="String" Nullable="true" MaxLength="255" />
         </EntityType>
-        <EntityType Name="UserSessions">
+        <EntityType Name="Role">
           <Key>
-            <PropertyRef Name="SessionID" />
+            <PropertyRef Name="RoleId" />
           </Key>
-          <Property Name="SessionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EndDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Visits" Relationship="MedDBModel.UserSessionsVisits" FromRole="UserSessions" ToRole="Visits" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="15" Unicode="true" FixedLength="false" />
+          <Property Name="AllowDeleteClients" Type="Boolean" Nullable="false" />
+          <Property Name="AllowDeleteVisits" Type="Boolean" Nullable="false" />
+          <Property Name="AllowAddUsers" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="MedDBModel.RoleUsers" FromRole="Role" ToRole="Users" />
         </EntityType>
-        <EntityType Name="Roles">
-          <Key>
-            <PropertyRef Name="RoleID" />
-          </Key>
-          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="RemoveVisits" Type="Boolean" Nullable="false" DefaultValue="True" />
-          <Property Name="RemoveClients" Type="Boolean" Nullable="false" DefaultValue="True" />
-          <Property Name="AddUsers" Type="Boolean" Nullable="false" DefaultValue="True" />
-          <NavigationProperty Name="Users" Relationship="MedDBModel.UsersRoles" FromRole="Roles" ToRole="Users" />
-        </EntityType>
-        <EntityType Name="Clients">
-          <Key>
-            <PropertyRef Name="ClientID" />
-          </Key>
-          <Property Name="ClientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Firstname" Type="String" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="Lastname" Type="String" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="Middlename" Type="String" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="Photo" Type="Binary" Nullable="true" MaxLength="Max" FixedLength="false" />
-          <Property Name="Gender" Type="String" Nullable="false" MaxLength="15" Unicode="true" FixedLength="false" />
-          <Property Name="BirthDate" Type="DateTime" Nullable="true" Precision="3" />
-          <Property Name="Address" Type="String" Nullable="true" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="Phone" Type="String" Nullable="true" MaxLength="25" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Visits" Relationship="MedDBModel.ClientsVisits" FromRole="Clients" ToRole="Visits" />
-          <Property Name="AddedByUser" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Visits">
-          <Key>
-            <PropertyRef Name="VisitID" />
-          </Key>
-          <Property Name="VisitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ClientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="SessionID" Type="Int32" Nullable="false" />
-          <Property Name="TypeID" Type="Int32" Nullable="false" />
-          <Property Name="Diagnosis" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" Nullable="true" />
-          <Property Name="VisitDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Clients" Relationship="MedDBModel.ClientsVisits" FromRole="Visits" ToRole="Clients" />
-          <NavigationProperty Name="UserSessions" Relationship="MedDBModel.UserSessionsVisits" FromRole="Visits" ToRole="UserSessions" />
-          <NavigationProperty Name="VisitType" Relationship="MedDBModel.VisitTypeVisits" FromRole="Visits" ToRole="VisitType" />
-          <Property Name="Removed" Type="Boolean" Nullable="false" />
-          <Property Name="RemovedByUser" Type="Int32" Nullable="false" />
-        </EntityType>
-        <Association Name="ClientsVisits">
-          <End Type="MedDBModel.Clients" Multiplicity="1" Role="Clients" />
-          <End Type="MedDBModel.Visits" Multiplicity="*" Role="Visits" />
-          <ReferentialConstraint>
-            <Principal Role="Clients">
-              <PropertyRef Name="ClientID" />
-            </Principal>
-            <Dependent Role="Visits">
-              <PropertyRef Name="ClientID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="UserSessionsVisits">
-          <End Type="MedDBModel.UserSessions" Multiplicity="1" Role="UserSessions" />
-          <End Type="MedDBModel.Visits" Multiplicity="*" Role="Visits" />
-          <ReferentialConstraint>
-            <Principal Role="UserSessions">
-              <PropertyRef Name="SessionID" />
-            </Principal>
-            <Dependent Role="Visits">
-              <PropertyRef Name="SessionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="VisitType">
-          <Key>
-            <PropertyRef Name="TypeID" />
-          </Key>
-          <Property Name="TypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TypeName" Type="String" Nullable="false" MaxLength="25" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Visits" Relationship="MedDBModel.VisitTypeVisits" FromRole="VisitType" ToRole="Visits" />
-        </EntityType>
-        <Association Name="VisitTypeVisits">
-          <End Type="MedDBModel.VisitType" Multiplicity="1" Role="VisitType" />
-          <End Type="MedDBModel.Visits" Multiplicity="*" Role="Visits" />
-          <ReferentialConstraint>
-            <Principal Role="VisitType">
-              <PropertyRef Name="TypeID" />
-            </Principal>
-            <Dependent Role="Visits">
-              <PropertyRef Name="TypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="UsersRoles">
+        <Association Name="RoleUsers">
+          <End Type="MedDBModel.Role" Role="Role" Multiplicity="1" />
           <End Type="MedDBModel.Users" Role="Users" Multiplicity="*" />
-          <End Type="MedDBModel.Roles" Role="Roles" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -299,82 +108,26 @@
         <MappingFragment StoreEntitySet="UsersSet">
           <ScalarProperty Name="UserID" ColumnName="UserID" />
           <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-          <ScalarProperty Name="Firstname" ColumnName="Firstname" />
-          <ScalarProperty Name="Lastname" ColumnName="Lastname" />
-          <ScalarProperty Name="Middlename" ColumnName="Middlename" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="Dismissed" ColumnName="Dismissed" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="IsDismissed" ColumnName="IsDismissed" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="UserSessionsSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MedDBModel.UserSessions)">
-        <MappingFragment StoreEntitySet="UserSessionsSet">
-          <ScalarProperty Name="SessionID" ColumnName="SessionID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
-          <ScalarProperty Name="EndDateTime" ColumnName="EndDateTime" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="RolesSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MedDBModel.Roles)">
-        <MappingFragment StoreEntitySet="RolesSet">
-          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+    <EntitySetMapping Name="RoleSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MedDBModel.Role)">
+        <MappingFragment StoreEntitySet="RoleSet">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
           <ScalarProperty Name="RoleName" ColumnName="RoleName" />
-          <ScalarProperty Name="RemoveVisits" ColumnName="RemoveVisits" />
-          <ScalarProperty Name="RemoveClients" ColumnName="RemoveClients" />
-          <ScalarProperty Name="AddUsers" ColumnName="AddUsers" />
+          <ScalarProperty Name="AllowDeleteClients" ColumnName="AllowDeleteClients" />
+          <ScalarProperty Name="AllowDeleteVisits" ColumnName="AllowDeleteVisits" />
+          <ScalarProperty Name="AllowAddUsers" ColumnName="AllowAddUsers" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ClientsSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MedDBModel.Clients)">
-        <MappingFragment StoreEntitySet="ClientsSet">
-          <ScalarProperty Name="ClientID" ColumnName="ClientID" />
-          <ScalarProperty Name="Firstname" ColumnName="Firstname" />
-          <ScalarProperty Name="Lastname" ColumnName="Lastname" />
-          <ScalarProperty Name="Middlename" ColumnName="Middlename" />
-          <ScalarProperty Name="Photo" ColumnName="Photo" />
-          <ScalarProperty Name="Gender" ColumnName="Gender" />
-          <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="AddedByUser" ColumnName="AddedByUser" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="VisitsSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MedDBModel.Visits)">
-        <MappingFragment StoreEntitySet="VisitsSet">
-          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
-          <ScalarProperty Name="ClientID" ColumnName="ClientID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="SessionID" ColumnName="SessionID" />
-          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-          <ScalarProperty Name="Diagnosis" ColumnName="Diagnosis" />
-          <ScalarProperty Name="VisitDateTime" ColumnName="VisitDateTime" />
-          <ScalarProperty Name="Removed" ColumnName="Removed" />
-          <ScalarProperty Name="RemovedByUser" ColumnName="RemovedByUser" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="VisitTypeSet">
-      <EntityTypeMapping TypeName="IsTypeOf(MedDBModel.VisitType)">
-        <MappingFragment StoreEntitySet="VisitTypeSet">
-          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <AssociationSetMapping Name="UsersRoles" TypeName="MedDBModel.UsersRoles" StoreEntitySet="UsersSet">
-      <EndProperty Name="Roles">
-        <ScalarProperty Name="RoleID" ColumnName="Roles_RoleID" />
-      </EndProperty>
-      <EndProperty Name="Users">
-        <ScalarProperty Name="UserID" ColumnName="UserID" />
-      </EndProperty>
-    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

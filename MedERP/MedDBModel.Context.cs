@@ -26,10 +26,6 @@ namespace MedERP
         }
     
         public virtual DbSet<Users> UsersSet { get; set; }
-        public virtual DbSet<UserSessions> UserSessionsSet { get; set; }
-        public virtual DbSet<Roles> RolesSet { get; set; }
-        public virtual DbSet<Clients> ClientsSet { get; set; }
-        public virtual DbSet<Visits> VisitsSet { get; set; }
-        public virtual DbSet<VisitType> VisitTypeSet { get; set; }
+        public virtual DbSet<Role> RoleSet { get; set; }
     }
 }

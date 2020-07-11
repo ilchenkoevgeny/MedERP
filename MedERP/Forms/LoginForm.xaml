@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MedERP"
+        xmlns:local="clr-namespace:MedERP.Properties"
+        xmlns:properties="clr-namespace:MedERP.Properties"
+
         mc:Ignorable="d"
         Title="LoginForm" Height="829.467" Width="1386.834" Initialized="frmLogin_Initialized">
     <Window.Background>
@@ -33,12 +35,12 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <ComboBox x:Name="tbLogin" Grid.Column="1" Margin="10,50,10,0" Grid.Row="2" VerticalAlignment="Top" Height="32"/>
+        <ComboBox x:Name="tbLogin" Grid.Column="1" Margin="10,50,10,0" Grid.Row="2" VerticalAlignment="Top" Height="32" FontSize="18" FontWeight="Bold"/>
         <TextBlock Grid.Column="1" Margin="72,1,72,0" Grid.Row="2" TextWrapping="Wrap" Text="Авторизация" Foreground="#FF3C6289" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,35,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Сотрудник:" VerticalAlignment="Top" FontSize="10" Height="13" Width="51"/>
         <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,89,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Пароль:" VerticalAlignment="Top" FontSize="10" Height="13" Width="36"/>
         <PasswordBox x:Name="tbPassword" Grid.Column="1" Margin="10,104,10,0" Grid.Row="2" Height="32" VerticalAlignment="Top" FontSize="22"/>
-        <Button Content="Войти" Grid.Column="1" Height="34" Margin="10,166,10,0" Grid.Row="2" VerticalAlignment="Top" Background="#FF008BFF"/>
+        <Button Content="Войти" Grid.Column="1" Height="34" Margin="10,166,10,0" Grid.Row="2" VerticalAlignment="Top" Background="#FF008BFF" Click="Button_Click"/>
         <TextBlock x:Name="tbTime" Grid.Column="3" Margin="10,19,10,0" TextWrapping="Wrap" Text="88:88" VerticalAlignment="Top" FontSize="90" Foreground="White" Grid.RowSpan="2"/>
         <TextBlock x:Name="tbDate" Grid.Column="3" Margin="10,125,57,0" TextWrapping="Wrap" Text="24 сентября, понедельник" Foreground="White" FontSize="18" Height="21" VerticalAlignment="Top" TextAlignment="Center"/>
         <Label x:Name="tbSec" Content="00" Grid.Column="3" Margin="0,87,42,30" Foreground="White" FontSize="22" Opacity="0.4" HorizontalAlignment="Right" Width="34"/>

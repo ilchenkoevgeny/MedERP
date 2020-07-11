@@ -12,18 +12,21 @@ namespace MedERP
     using System;
     using System.Collections.Generic;
     
-    public partial class VisitType
+    public partial class Role
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public VisitType()
+        public Role()
         {
-            this.Visits = new HashSet<Visits>();
+            this.Users = new HashSet<Users>();
         }
     
-        public int TypeID { get; set; }
-        public string TypeName { get; set; }
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
+        public bool AllowDeleteClients { get; set; }
+        public bool AllowDeleteVisits { get; set; }
+        public bool AllowAddUsers { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Visits> Visits { get; set; }
+        public virtual ICollection<Users> Users { get; set; }
     }
 }

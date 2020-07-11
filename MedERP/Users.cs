@@ -16,12 +16,13 @@ namespace MedERP
     {
         public int UserID { get; set; }
         public int RoleID { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public string Middlename { get; set; }
-        public string Phone { get; set; }
-        public bool Dismissed { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string MiddleName { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool IsDismissed { get; set; }
+        public string Password { get; set; }
     
-        public virtual Roles Roles { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

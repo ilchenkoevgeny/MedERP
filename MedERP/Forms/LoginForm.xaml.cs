@@ -16,7 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using NCLA;
 
 
 namespace MedERP
@@ -44,13 +43,20 @@ namespace MedERP
             {
                 using (var CurentContext = new MedDBModelContainer())
                 {
-                    var users = CurentContext.UsersSet;
+                    var users = CurentContext.UsersSet.ToList();
                     if (!users.Any())
                     {
                         var default_user = GetAdmin(CurentContext);
                         CurentContext.UsersSet.Add(default_user);
                         CurentContext.SaveChanges();
                         ExLog.Info("В настройках пользователей программы не обнаружено ни одного пользователя. Создан пользователь по умолчанию `Администратор`");
+                    }
+                    else
+                    {
+                        tbLogin.ItemsSource = CurentContext.UsersSet.ToList();
+                        tbLogin.SelectedValue = "UserID";
+                        tbLogin.DisplayMemberPath = "FirstName";
+
                     }
                 }
             }
@@ -66,28 +72,37 @@ namespace MedERP
         {
             return new Users()
             {
-                Dismissed = false,
-                Firstname = "Администратор",
-                Lastname = "Администратор",
-                Middlename = "Администратор",
-                Phone = "+71231231212",
-                Roles = GetRole("Администратор", CurentContext)
+                IsDismissed = false,
+                FirstName = "Администратор",
+                LastName = "Администратор",
+                MiddleName = "Администратор",
+                PhoneNumber = "+71231231212",
+                Role = GetRole("Администратор", CurentContext),
+                Password = ""
             };
         }
 
-        private Roles GetRole(string rolename, MedDBModelContainer CurentContext)
+        private Role GetRole(string rolename, MedDBModelContainer CurentContext)
         {
             try
             {
-                var Roles = CurentContext.RolesSet;
+                var Roles = CurentContext.RoleSet.ToList();
                 if (Roles.Any())
                 {
-                    return (CurentContext.RolesSet.Single(x => x.RoleName.Equals(rolename)));
+                    return (CurentContext.RoleSet.Single(x => x.RoleName.Equals(rolename)));
                 }
                 else
                 {
-                    MessageBox.Show(
-                        "Необходимо произвести настройку ролей. Обратитесь к вашему системному администратору.");
+                    var DefaultRole = new Role()
+                    {
+                        RoleName = "Администратор",
+                        AllowAddUsers = true,
+                        AllowDeleteClients = true,
+                        AllowDeleteVisits = true
+                    };
+                    CurentContext.RoleSet.Add(DefaultRole);
+                    CurentContext.SaveChanges();
+                    return DefaultRole;
                 }
             }
             catch (Exception ex)
@@ -95,7 +110,7 @@ namespace MedERP
                 ExLog.Error(ex.Message, ex);
                 MessageBox.Show("Ошибка получения ролей.", "Опс, ошибка!");
             }
-            return new Roles();
+            return new Role();
         }
 
         private void GetTime(object state)
@@ -132,15 +147,8 @@ namespace MedERP
 
         public static bool VerifyHashedPassword(string hashedPassword, string password)
         {
+            if (password.Equals("") && hashedPassword.Equals("")) return true;
             byte[] buffer4;
-            if (hashedPassword == null)
-            {
-                return false;
-            }
-            if (password == null)
-            {
-                throw new ArgumentNullException("password");
-            }
             byte[] src = Convert.FromBase64String(hashedPassword);
             if ((src.Length != 0x31) || (src[0] != 0))
             {
@@ -162,6 +170,29 @@ namespace MedERP
             bool areEqual = buffer3.SequenceEqual(buffer4);
 
             return areEqual;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (var CurentContext = new MedDBModelContainer())
+                {
+                    if(tbLogin.Text == "") return;
+                    var CurentUser = CurentContext.UsersSet.Single(x => x.FirstName.Equals(tbLogin.Text));
+                    if (VerifyHashedPassword(CurentUser.Password, tbPassword.Password))
+                    {
+                        //АВТОРИЗАЦИЯ УСПЕШНА
+                        this.Hide();
+                    }
+                    else MessageBox.Show("Неверный пароль, попробуйте пожалуйста еще раз.", "Ошибка авторизации");
+                }
+            }
+            catch (Exception ex)
+            {
+                ExLog.Error(ex.Message, ex);
+                MessageBox.Show("Произошла ошибка авторизации пользователя. Обратитесь к вашему системному администратору.", "Опс, ошибка!");
+            }
         }
     }
 }
