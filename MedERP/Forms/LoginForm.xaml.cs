@@ -184,6 +184,8 @@ namespace MedERP
                     {
                         //АВТОРИЗАЦИЯ УСПЕШНА
                         this.Hide();
+                        var ManagerForm = new ManagerForm();
+                        ManagerForm.Show();
                     }
                     else MessageBox.Show("Неверный пароль, попробуйте пожалуйста еще раз.", "Ошибка авторизации");
                 }
